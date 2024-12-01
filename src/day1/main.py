@@ -1,5 +1,7 @@
 import re
 from pathlib import Path
+from unittest.mock import right
+
 
 def extract_two_digits(line: str, pattern: re.Pattern[str]) -> tuple[int, int]:
     matching = pattern.findall(line)
@@ -18,7 +20,12 @@ def main(input_lines: list[str]) -> int:
     return sum(delta_list)
 
 def part_two_main(input_lines: list[str]) -> int:
-    pass
+    pattern = re.compile(r"(\d+)\s+(\d+)")
+    list1, list2 = parse_all(input_lines, pattern)
+    left = sorted(list1)
+    right = sorted(list2)
+    similarity_scores = [item * right.count(item) for item in left]
+    return sum(similarity_scores)
 
 
 if __name__ == "__main__":

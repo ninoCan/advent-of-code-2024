@@ -1,3 +1,4 @@
+import re
 from inspect import getsourcefile
 from pathlib import Path
 from typing import List
@@ -5,7 +6,7 @@ from typing import List
 
 from src.day1.main import (
     main,
-    part_two_main,
+    part_two_main, parse_all,
 )
 
 
@@ -23,5 +24,6 @@ def test_main() -> None:
 
 def test_part_two_main() -> None:
     expected = 31
-    actual = part_two_main(provide_test_lines(slice(88, 94)))
+    lines = provide_test_lines(slice(88, 94))
+    actual = part_two_main(lines)
     assert actual == expected
