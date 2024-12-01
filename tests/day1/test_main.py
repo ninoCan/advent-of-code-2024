@@ -16,12 +16,12 @@ from src.day1.main import (
 def provide_test_lines() -> List[str]:
     source_path = Path(getsourcefile(main)).resolve().parent / 'README.md'
     with source_path.open("r") as file:
-        example_slice = slice("n - 1", "m")
+        example_slice = slice(41, 47)
         return [line.strip() for line in file.readlines()[example_slice]]
 
 
 def test_main(provide_test_lines: List[str]) -> None:
-    expected = "placeholder"
+    expected = 11
     actual = main(provide_test_lines)
     assert actual == expected
 
