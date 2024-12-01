@@ -1,12 +1,23 @@
+import re
 from pathlib import Path
-from typing import List
 
+def extract_two_digits(line: str, pattern: re.Pattern[str]) -> tuple[int, int]:
+    matching = pattern.findall(line)
+    return int(matching[0][0]), int(matching[0][1])
 
-def main(input_lines: List[str]) -> int:
-    pass
+def parse_all(lines: list[str], pattern: re.Pattern[str]) -> tuple[list[int], list[int]]:
+    tuples = [extract_two_digits(line, pattern) for line in lines]
+    return zip(*tuples)
 
+def main(input_lines: list[str]) -> int:
+    pattern = re.compile(r"(\d+)\s+(\d+)")
+    list1, list2 = parse_all(input_lines, pattern)
+    sorted_list1 = sorted(list1)
+    sorted_list2 = sorted(list2)
+    delta_list = [abs(b - a) for a, b in zip(sorted_list1, sorted_list2)]
+    return sum(delta_list)
 
-def part_two_main(input_lines: List[str]) -> int:
+def part_two_main(input_lines: list[str]) -> int:
     pass
 
 
