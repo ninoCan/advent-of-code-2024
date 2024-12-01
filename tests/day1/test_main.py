@@ -6,7 +6,7 @@ from typing import List
 
 import pytest
 
-from src.advent_of_code_2023.day1.main import (
+from src.day1.main import (
     main,
     part_two_main,
 )

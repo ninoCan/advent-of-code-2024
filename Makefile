@@ -26,7 +26,7 @@ create-folder:
 	@echo "Created folder: $(FOLDER_PATH)"
 
 fetch-page: create-folder
-	curl -o "$(FOLDER_PATH)/day$(DAY).html" "$(URL_FOR_TODAY)"
+	curl -o "$(FOLDER_PATH)/day$(DAY).html" "$(URL_FOR_TODAY)" -c .env
 	@echo "Fetched page for day $(DAY) to $(FOLDER_PATH)"
 
 convert-to-markdown: fetch-page
