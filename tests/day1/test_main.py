@@ -1,10 +1,7 @@
-""" This is a template file do not use it directly.
-"""
 from inspect import getsourcefile
 from pathlib import Path
 from typing import List
 
-import pytest
 
 from src.day1.main import (
     main,
@@ -12,21 +9,19 @@ from src.day1.main import (
 )
 
 
-@pytest.fixture
-def provide_test_lines() -> List[str]:
+def provide_test_lines(slc: slice) -> List[str]:
     source_path = Path(getsourcefile(main)).resolve().parent / 'README.md'
     with source_path.open("r") as file:
-        example_slice = slice(41, 47)
-        return [line.strip() for line in file.readlines()[example_slice]]
+        return [line.strip() for line in file.readlines()[slc]]
 
 
-def test_main(provide_test_lines: List[str]) -> None:
+def test_main() -> None:
     expected = 11
-    actual = main(provide_test_lines)
+    actual = main(provide_test_lines(slice(41, 47)))
     assert actual == expected
 
 
-def test_part_two_main(provide_test_lines: List[str]) -> None:
-    expected = "placeholder"
-    actual = part_two_main(provide_test_lines)
+def test_part_two_main() -> None:
+    expected = 31
+    actual = part_two_main(provide_test_lines(slice(88, 94)))
     assert actual == expected
