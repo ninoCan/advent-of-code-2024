@@ -16,3 +16,4 @@ wheels/
 
 # input files -- not allowed by the rules
 **/input.txt
+src/**/README.md
