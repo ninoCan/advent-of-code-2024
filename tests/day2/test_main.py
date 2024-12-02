@@ -24,6 +24,6 @@ def test_main(provide_test_lines: list[str]) -> None:
 
 
 def test_part_two_main(provide_test_lines: list[str]) -> None:
-    expected = "placeholder"
+    expected = 4
     actual = part_two_main(provide_test_lines)
     assert actual == expected
