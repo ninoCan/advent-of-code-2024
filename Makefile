@@ -4,6 +4,7 @@ YEAR := $(shell date +'%Y')
 DAY := $(shell date +'%d' | sed 's/^0//')
 FOLDER_PATH := src/day$(DAY)
 TEST_FOLDER := tests/day$(DAY)
+AOC_SESSION_COOKIE := $(<.session-cookie) 
 URL_FOR_TODAY :=  "https://adventofcode.com/$(YEAR)/day/$(DAY)"
 BRANCH_NAME := day$(DAY)-challenge1
 DEFAULT_STEM := README
