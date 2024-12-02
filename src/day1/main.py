@@ -1,6 +1,6 @@
 import re
 from pathlib import Path
-from unittest.mock import right
+
 
 
 def extract_two_digits(line: str, pattern: re.Pattern[str]) -> tuple[int, int]:
