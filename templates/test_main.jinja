@@ -5,10 +5,8 @@ from pathlib import Path
 
 import pytest
 
-from src.day{{ day }}.main import (
-    main,
-    part_two_main,
-)
+from src.day{{ day }}.main import Solution
+
 
 
 @pytest.fixture
@@ -19,13 +17,16 @@ def provide_test_lines() -> list[str]:
         return [line.strip() for line in file.readlines()[example_slice]]
 
 
-def test_main(provide_test_lines: list[str]) -> None:
+
+def test_first_task(provide_test_lines: list[str]) -> None:
+    under_test = Solution(lines=provide_test_lines)
     expected = "placeholder"
-    actual = main(provide_test_lines)
+    actual = under_test.first_task()
     assert actual == expected
 
 
-def test_part_two_main(provide_test_lines: list[str]) -> None:
+def test_second_task(provide_test_lines: list[str]) -> None:
+    under_test = Solution(lines=provide_test_lines)
     expected = "placeholder"
-    actual = part_two_main(provide_test_lines)
+    actual = under_test.second_task()
     assert actual == expected

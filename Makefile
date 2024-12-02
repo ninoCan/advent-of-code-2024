@@ -4,12 +4,12 @@ YEAR := $(shell date +'%Y')
 DAY := $(shell date +'%d' | sed 's/^0//')
 FOLDER_PATH := src/day$(DAY)
 TEST_FOLDER := tests/day$(DAY)
-AOC_SESSION_COOKIE := $(<.session-cookie) 
+AOC_SESSION_COOKIE := $(shell cat .session-cookie)
 URL_FOR_TODAY :=  "https://adventofcode.com/$(YEAR)/day/$(DAY)"
 BRANCH_NAME := day$(DAY)-challenge1
 DEFAULT_STEM := README
 
-.PHONY: create-folder fetch-page generate-pyfiles convert-to-markdown commit-prompt
+.PHONY: create-folder fetch-page generate-pyfiles convert-to-markdown commit-prompt touch-files
 
 all: convert-to-markdown generate-pyfiles fetch-input commit-prompt
 

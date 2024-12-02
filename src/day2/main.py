@@ -29,7 +29,7 @@ def is_safe_with_damper(level: Level) -> bool:
     return False
 
 def main(input_lines: list[str]) -> int:
-    all_levels = parse_all(input_lines, extract_pattern, pattern)
+    all_levels = parse_all(input_lines, extract_pattern)
     safety_results = [is_safe(level) for level in all_levels]
     return safety_results.count(True)
 
