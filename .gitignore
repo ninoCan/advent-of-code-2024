@@ -12,4 +12,5 @@ wheels/
 # environments variables
 .env
 .idea
+.session-cookie
 
