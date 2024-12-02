@@ -15,9 +15,9 @@ def is_safe(level: Level) -> bool:
     deltas = [int(right) - int(left) for left, right in pairwise(level)]
     if level[0] < level[1]:
         is_level_safe = lambda x: x >= 1 and x <= 3
-        return all([is_valid(item) for item in deltas])
+        return all([is_level_safe(item) for item in deltas])
     is_level_safe = lambda x: x >= -3 and x <= -1
-    return all([is_valid(item) for item in deltas])
+    return all([is_level_safe(item) for item in deltas])
 
 def is_safe_with_damper(level: Level) -> bool:
     if is_safe(level):
