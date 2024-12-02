@@ -19,6 +19,15 @@ def is_safe(level: Level) -> bool:
     is_valid = lambda x: x >= -3 and x <= -1
     return all([is_valid(item) for item in deltas])
 
+def is_safe_with_damper(level: Level) -> bool:
+    if is_safe(level):
+        return True
+    for ignore_index in range(len(level)):
+        sub = level[:ignore_index] + level[ignore_index + 1:]
+        if is_safe(sub):
+            return True
+    return False
+
 def main(input_lines: list[str]) -> int:
     pattern = re.compile(r"\d+")
     all_levels = parse_all(input_lines, extract_pattern, pattern)
@@ -26,7 +35,10 @@ def main(input_lines: list[str]) -> int:
     return safety_results.count(True)
 
 def part_two_main(input_lines: list[str]) -> int:
-    pass
+    pattern = re.compile(r"\d+")
+    all_levels = parse_all(input_lines, extract_pattern, pattern)
+    safety_results = [is_safe_with_damper(level) for level in all_levels]
+    return safety_results.count(True)
 
 
 if __name__ == "__main__":
