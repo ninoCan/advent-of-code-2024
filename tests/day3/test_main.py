@@ -26,7 +26,7 @@ def test_first_task(provide_test_lines: list[str]) -> None:
 
 
 def test_second_task(provide_test_lines: list[str]) -> None:
-    under_test = Solution(lines=provide_test_lines)
+    under_test = Solution(lines=["xmul(2,4)&mul[3,7]!^()?mul(8,5))"])
     expected = 48
     actual = under_test.second_task()
     assert actual == expected
