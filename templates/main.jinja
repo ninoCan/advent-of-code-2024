@@ -1,19 +1,21 @@
 from pathlib import Path
 
+class Solution:
+    _STANDARD_PATH = Path(__file__).parent / "input.txt"
 
-def main(input_lines: list[str]) -> int:
-    pass
+    def __init__(self, path: Path=_STANDARD_PATH, lines: Optional[list[str]] = None) -> Self:
+        with open(path) as file:
+            self.lines = file.readlines() if not lines else lines
+
+    def first_task(self) -> int:
+        pass
 
 
-def part_two_main(input_lines: list[str]) -> int:
-    pass
+    def second_task(self) -> int:
+        pass
 
 
 if __name__ == "__main__":
-    file_path = Path(__file__).parent / "input.txt"
-    with open(file_path) as file:
-        lines = file.readlines()
-    first_answer = main(lines)
-    print("The first answer is", first_answer)
-    second_answer = part_two_main(lines)
-    print("The second answer is", second_answer)
+    solution = Solution()
+    print("The first answer is", solution.first_task())
+    print("The second answer is", solution.second_task()
