@@ -8,7 +8,6 @@ import pytest
 from src.day4.main import Solution
 
 
-
 @pytest.fixture
 def provide_test_lines() -> list[str]:
     source_path = Path(getsourcefile(Solution)).resolve().parent / 'README.md'
