@@ -22,19 +22,29 @@ class Grid:
         ]
 
     @property
-    def diagonals(self) -> list[str]:
-        main_diagonals = [
+    def main_diagonals(self) -> list[str]:
+        return [
             "".join([
-                self.data[(increment) % self.height][(anchor + increment) % self.width]
+                self.data[increment % self.height][(anchor + increment) % self.width]
                 for increment in range(self.width)
             ])
             for anchor in range(self.height)
         ]
-        anti_diagonals = [
+
+    @property
+    def anti_diagonals(self) -> list[str]:
+        return [
             "".join([
-                self.data[(increment) % self.height][(anchor - increment) % self.width]
+                self.data[increment % self.height][(anchor - increment) % self.width]
                 for increment in range(self.width)
             ])
             for anchor in range(self.height)
         ]
-        return main_diagonals + anti_diagonals
+
+    @property
+    def toroidal_diagonals(self) -> list[str]:
+        return self.main_diagonals + self.anti_diagonals
+
+    @property
+    def box_diagonals(self) -> list[str]:
+        pass

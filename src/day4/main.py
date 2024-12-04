@@ -1,5 +1,9 @@
+import re
 from pathlib import Path
 from typing import Optional
+
+from src.utils import Grid, parse_all
+
 
 class Solution:
     _STANDARD_PATH = Path(__file__).parent / "input.txt"
@@ -8,8 +12,19 @@ class Solution:
         with open(path) as file:
             self.lines = file.readlines() if not lines else lines
 
+
+    @staticmethod
+    def count_occurences(line: str, pattern: re.Pattern[str]) -> int:
+        match = pattern.findall(line)
+        return len(match)
+
     def first_task(self) -> int:
-        pass
+        grid = Grid(self.lines)
+        pattern = re.compile(r"XMAS")
+        row_counts = parse_all(grid.rows, self.count_occurences, pattern)
+        col_counts = parse_all(grid.columns, self.count_occurences, pattern)
+        diag_counts = parse_all(grid.columns, self.count_occurences, pattern)
+        return sum(row_counts + col_counts + diag_counts)
 
 
     def second_task(self) -> int:
