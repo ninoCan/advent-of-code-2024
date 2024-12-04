@@ -23,7 +23,7 @@ class Solution:
         pattern = re.compile(r"(?=SAMX|XMAS)")
         row_counts = parse_all(grid.rows, self.count_occurences, pattern)
         col_counts = parse_all(grid.columns, self.count_occurences, pattern)
-        diag_counts = parse_all(grid.box_diagonals, self.count_occurences, pattern)
+        diag_counts = parse_all(grid.diagonals, self.count_occurences, pattern)
         return sum(row_counts + col_counts + diag_counts)
 
 

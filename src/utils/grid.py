@@ -20,12 +20,19 @@ class Grid:
         return [ "".join(col) for col in self.data.T ]
 
     @property
-    def diagonals(self) -> list[str]:
+    def main_diagonals(self) -> list[str]:
         return [
             "".join(self.data.diagonal(offset))
             for offset in range(-self.width + 1, self.width)
-        ] + [
+        ]
+
+    @property
+    def anti_diagonals(self) -> list[str]:
+        return [
             "".join(np.fliplr(self.data).diagonal(offset))
             for offset in range(-self.width + 1, self.width)
         ]
 
+    @property
+    def diagonals(self) -> list[str]:
+        return self.main_diagonals + self.anti_diagonals
