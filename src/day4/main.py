@@ -33,17 +33,37 @@ class Solution:
     class GridWithX(Grid):
        def locate_xes(self, pattern:re.Pattern[str] = r"(?=SAM|MAS)") -> list[Point]:
            """ Get to the points coordinates of all the x's formed by the pattern SAM|MAS. """
-           def to_cartesian(offset, diagonal_index, anti_diagonal=False):
-               """ Return the coordinates traformed from offset, (anti)-diagonal index to cartesian."""
-               correction = 0 if anti_diagonal else self.width - 1
-               transposed_coordinate = (
-                    diagonal_index - ((-1) ** correction) * (offset + correction)
-                ) % self.width
-               if offset >= 0:
-                   return Point(offset, transposed_coordinate)
-               return Point(transposed_coordinate, abs(offset))
+
+           rank = self.width - 1
+
+           def to_cartesian(offset: int, index: int, anti: bool=False) -> Point:
+               """ Switch from diagonal coordinates to cartesian.
+
+               :param offset: the offset identifying the diagonal.
+               :param index:  the diagonal index of the element
+               :param anti: `True` for main diagonals, `False` for anti diagonals.
+               :return: `Point(x, y)` the coordinate on the grid.
+               """
+               if abs(offset) > rank:
+                   raise ValueError(f"{offset} out or range")
+               elif (index < 0) or (index > 2 * rank + 1):
+                   raise  ValueError(f"{index} out of range")
+               match [offset]:
+                   case [0]:
+                       if anti:
+                           return Point( index, rank - index )
+                       return Point(index, index)
+                   case [x] if x > 0:
+                       if anti:
+                           return Point(offset + index, rank - offset - index)
+                       return Point(offset + index, index)
+                   case [x] if x < 0:
+                       if anti:
+                           return Point(index, rank - offset - index)
+                       return Point(offset + index, index)
+
            def to_offset(index):
-              return index - self.width + 1
+              return index - rank
 
            main_coordinate_matches = [
                to_cartesian(to_offset(idx), match.start() + 1)
@@ -51,7 +71,7 @@ class Solution:
                for match in pattern.finditer(diag)
            ]
            anti_coordinate_matches = [
-               to_cartesian(to_offset(idx), idx, anti_diagonal=True)
+               to_cartesian(to_offset(idx), match.start() + 1, anti=True)
                for idx, diag in enumerate(self.anti_diagonals)
                for match in pattern.finditer(diag)
            ]
