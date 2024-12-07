@@ -1,4 +1,3 @@
-from tkinter import Grid
 from typing import Sequence
 
 import numpy as np
@@ -18,6 +17,18 @@ class Grid:
 
     def locate(self, char: str):
         return np.argwhere(self.data == char)
+
+    @staticmethod
+    def next_position(current: Point, direction: Direction) -> Point:
+        match direction:
+            case Direction.UP:
+                return Point(current.x, current.y + 1)
+            case Direction.RIGHT:
+                return Point(current.x + 1, current.y)
+            case Direction.DOWN:
+                return Point(current.x, current.y - 1)
+            case Direction.LEFT:
+                return Point(current.x - 1, current.y)
 
     def is_inside(self, point: Point) -> bool:
        if (
