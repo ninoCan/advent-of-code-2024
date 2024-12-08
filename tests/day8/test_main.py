@@ -25,6 +25,6 @@ def test_first_task(provide_test_lines: list[str]) -> None:
 
 def test_second_task(provide_test_lines: list[str]) -> None:
     under_test = Solution(lines=provide_test_lines)
-    expected = "placeholder"
+    expected = 34
     actual = under_test.second_task()
     assert actual == expected
