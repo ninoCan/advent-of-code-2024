@@ -2,7 +2,7 @@ import re
 from pathlib import Path
 from typing import Optional, NamedTuple
 
-from src.utils import Grid, parse_all
+from src.utils import Grid, parse_all, Point
 
 
 class Point(NamedTuple):
