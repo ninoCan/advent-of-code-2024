@@ -1,7 +1,6 @@
 from pathlib import Path
-from typing import Optional, Self
+from typing import Optional
 
-from returns.maybe import Maybe, Some, Nothing
 
 from src.utils import Grid, Point
 from src.utils.Directions import Direction, rotate
@@ -10,65 +9,76 @@ from src.utils.Directions import Direction, rotate
 class Solution:
     _STANDARD_PATH = Path(__file__).parent / "input.txt"
 
-    def __init__(self, path: Path=_STANDARD_PATH, lines: Optional[list[str]] = None):
+    def __init__(self, path: Path = _STANDARD_PATH, lines: Optional[list[str]] = None):
         with open(path) as file:
             self.lines = file.readlines() if not lines else lines
-
 
     class GuardGrid(Grid):
         TRAIL_MARK = "X"
         OBSTACLE = "#"
 
-        def locate_guard(self) -> Maybe[tuple[Point, Direction]]:
-            """ Find guard position and their direction if on board. """
+        def locate_guard(self) -> Optional[tuple[Point, Direction]]:
+            """Find guard position and their direction if on board."""
             for direction in Direction:
-                if len(coords:=self.locate(direction.value))>0:
-                     return Some((Point(int(coords[0]), int(coords[1])), direction))
-            return Nothing
+                if len(coords := self.locate(direction.value)) > 0:
+                    return Point(int(coords[0][0]), int(coords[0][1])), direction
+            return None
 
         @property
         def trail(self) -> list[Point]:
-            return [Point(int(coords[0]), int(coords[1])) for coords in self.locate(self.TRAIL_MARK)]
+            return [
+                Point(int(coords[0]), int(coords[1]))
+                for coords in self.locate(self.TRAIL_MARK)
+            ]
 
         @property
         def obstructions(self) -> list[Point]:
-            return [Point(int(coords[0]), int(coords[1])) for coords in self.locate(self.OBSTACLE)]
+            return [
+                Point(int(coords[0]), int(coords[1]))
+                for coords in self.locate(self.OBSTACLE)
+            ]
 
-        def walk(self, guard: Maybe[tuple[Point, Direction]]) -> Self:
-            if guard.empty:
-               return self
-            new_grid = self.copy()
+        @staticmethod
+        def next_position(current: Point, direction: str) -> Point:
+            match direction:
+                case "^":
+                    return Point(current.x - 1, current.y)
+                case ">":
+                    return Point(current.x, current.y + 1)
+                case "v":
+                    return Point(current.x + 1, current.y)
+                case "<":
+                    return Point(current.x, current.y - 1)
+
+        def walk(self) -> None:
+            if not (guard := self.locate_guard()):
+                return None
             position, direction = guard
-            if self.next_position(position, direction) not in self.obstructions:
-                new_grid[position] = self.TRAIL_MARK
-                if self.is_inside(self.next_position(position, direction)):
-                    new_grid[self.next_position(position, direction)] = direction.value
-                return new_grid
-            new_grid[position] = rotate(direction).value
-            return new_grid
-
-        def is_inside(self, next_position: Point) -> bool:
-            if (next_position.x > 0 and
-                next_position.x < self.width and
-                next_position.y > 0 and
-                next_position.y < self.height
-            ):
-                return True
-            return False
+            if self.next_position(position, direction.value) not in self.obstructions:
+                self.data[*position] = self.TRAIL_MARK
+                next_position = self.next_position(position, direction.value)
+                if self.is_inside(next_position):
+                    self.data[*next_position] = direction.value
+                    return None
+                return None
+            self.data[*position] = rotate(direction.value).value
+            return None
 
     def first_task(self) -> int:
         grid = self.GuardGrid(self.lines)
-        while not grid.locate_guard().empty:
-            grid.walk(grid.locate_guard())
+        while grid.locate_guard():
+            grid.walk()
         return len(grid.trail)
 
     def second_task(self) -> int:
         pass
 
+
 def main():
     solution = Solution()
     print("The first answer is", solution.first_task())
     print("The second answer is", solution.second_task())
+
 
 if __name__ == "__main__":
     main()
