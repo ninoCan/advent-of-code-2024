@@ -9,7 +9,7 @@ from src.utils.Directions import Direction
 
 class Grid:
     def __init__(self, data: Sequence[str]):
-        self.width = len(data[0])
+        self.width = len(data[0].strip("\n"))
         self.height = len(data)
         self.data = np.char.asarray([
                 [letter for letter in row ]
@@ -18,6 +18,16 @@ class Grid:
 
     def locate(self, char: str):
         return np.argwhere(self.data == char)
+
+    def is_inside(self, point: Point) -> bool:
+       if (
+           point.x >= 0 and
+           point.x < self.width and
+           point.y >= 0 and
+           point.y < self.height
+       ):
+           return True
+       return False
 
     @staticmethod
     def next_position(current: Point, direction: Direction) -> Point:
