@@ -11,13 +11,14 @@ class Direction(Enum):
     def __iter__(cls):
         return iter([member.value for member in cls])
 
-def rotate(current: Direction) -> Direction:
-    match current.value:
-        case Direction.UP:
+
+def rotate(current: str) -> Direction:
+    match current:
+        case "^":
             return Direction.RIGHT
-        case Direction.RIGHT:
+        case ">":
             return Direction.DOWN
-        case Direction.DOWN:
+        case "v":
             return Direction.LEFT
-        case Direction.LEFT:
+        case "<":
             return Direction.UP

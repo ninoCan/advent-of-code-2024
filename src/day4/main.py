@@ -1,13 +1,9 @@
 import re
 from pathlib import Path
-from typing import Optional, NamedTuple
+from typing import Optional
 
 from src.utils import Grid, parse_all, Point
 
-
-class Point(NamedTuple):
-   x: int
-   y: int
 
 class Solution:
     _STANDARD_PATH = Path(__file__).parent / "input.txt"

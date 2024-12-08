@@ -1,4 +1,3 @@
-from tkinter import Grid
 from typing import Sequence
 
 import numpy as np
@@ -11,43 +10,39 @@ class Grid:
     def __init__(self, data: Sequence[str]):
         self.width = len(data[0].strip("\n"))
         self.height = len(data)
-        self.data = np.char.asarray([
-                [letter for letter in row ]
-                for row in data
-            ]) if data else np.char.asarray([])
+        self.data = (
+            np.char.asarray([[letter for letter in row] for row in data])
+            if data
+            else np.char.asarray([])
+        )
 
     def locate(self, char: str):
         return np.argwhere(self.data == char)
 
     def is_inside(self, point: Point) -> bool:
-       if (
-           point.x >= 0 and
-           point.x < self.width and
-           point.y >= 0 and
-           point.y < self.height
-       ):
-           return True
-       return False
+        if 0 <= point.x < self.width and 0 <= point.y < self.height:
+            return True
+        return False
 
     @staticmethod
     def next_position(current: Point, direction: Direction) -> Point:
-        match direction:
-            case Direction.UP:
+        match direction.value:
+            case "^":
                 return Point(current.x, current.y + 1)
-            case Direction.RIGHT:
+            case ">":
                 return Point(current.x + 1, current.y)
-            case Direction.DOWN:
+            case "v":
                 return Point(current.x, current.y - 1)
-            case Direction.LEFT:
+            case "<":
                 return Point(current.x - 1, current.y)
 
     @property
     def rows(self) -> list[str]:
-        return [ "".join(row) for row in self.data ]
+        return ["".join(row) for row in self.data]
 
     @property
     def columns(self) -> list[str]:
-        return [ "".join(col) for col in self.data.T ]
+        return ["".join(col) for col in self.data.T]
 
     @property
     def main_diagonals(self) -> list[str]:
@@ -67,5 +62,5 @@ class Grid:
     def diagonals(self) -> list[str]:
         return self.main_diagonals + self.anti_diagonals
 
-    def copy(self) -> Grid:
-       return Grid(self.data.copy())
+    def copy(self) -> "Grid":
+        return Grid(self.data.copy())
