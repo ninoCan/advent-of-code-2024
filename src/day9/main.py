@@ -1,5 +1,6 @@
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Sequence
+
 
 class Solution:
     _STANDARD_PATH = Path(__file__).parent / "input.txt"
@@ -8,8 +9,13 @@ class Solution:
         with open(path) as file:
             self.lines = file.readlines() if not lines else lines
 
-    def first_task(self) -> int:
+    def generate_block_memory(self, representation: Sequence[str]) -> list[list[int]]:
         pass
+
+    def first_task(self) -> int:
+        block_memory = self.generate_block_memory(self.lines)
+        compressed_memory = self.compress(block_memory)
+        return sum([index * value for index, value in enumerate(compressed_memory)])
 
 
     def second_task(self) -> int:
