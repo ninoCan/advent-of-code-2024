@@ -2,6 +2,8 @@ from copy import deepcopy
 from pathlib import Path
 from typing import Optional, Sequence
 
+from src.utils import flatten
+
 
 class Solution:
     _STANDARD_PATH = Path(__file__).parent / "input.txt"
@@ -43,8 +45,55 @@ class Solution:
         compressed_memory = self.compress(block_memory)
         return sum([index * value for index, value in enumerate(compressed_memory)])
 
+    @staticmethod
+    def as_files(block_memory: list[list[int]]) -> list[list[int]]:
+        deep_copy = deepcopy(block_memory)
+        file_memory, file = [], []
+        for el in deep_copy:
+            if el:
+                if file and el[0] != file[0]:
+                    file_memory.append(deepcopy(file))
+                    file.clear()
+                file.append(el.pop())
+            else:
+                if file and not file[0] == "_":
+                    file_memory.append(deepcopy(file))
+                    file.clear()
+                file.append("_")
+        if file:
+            file_memory.append(deepcopy(file))
+        return file_memory
+
+    @staticmethod
+    def move_file_closer(memory, file) -> list[list[int]]:
+        copied_memory = deepcopy(memory)
+        size, true_index = len(file), memory.index(file)
+        for inode, item in enumerate(memory):
+            space = len(item)
+            if inode >= true_index:
+                break
+            if item[0] == "_" and space >= size:
+                prior = copied_memory[: inode + 1]
+                middle = copied_memory[inode + 1 : true_index]
+                rest = copied_memory[true_index + 1 :]
+                prior[inode] = memory[true_index]
+                freed = [["_"] * size]
+                return (
+                    prior + [["_"] for _ in range(space - size)] + middle + freed + rest
+                )
+        return memory
+
+    def compress_as_file(self, file_memory: list[list[int]]) -> list[int]:
+        deep_copy = deepcopy(file_memory)
+        for el in reversed(file_memory):
+            if el[0] != "_":
+                deep_copy = self.move_file_closer(deep_copy, el)
+        return [el if str(el).isdigit() else 0 for el in flatten(deep_copy)]
+
     def second_task(self) -> int:
-        pass
+        file_memory = self.as_files(self.generate_block_memory(self.lines))
+        compressed = self.compress_as_file(file_memory)
+        return sum([index * value for index, value in enumerate(compressed)])
 
 
 def main():
