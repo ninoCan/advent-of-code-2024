@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pytest
 
-from src.day7.main import Solution
+from src.day07.main import Solution
 
 
 @pytest.fixture

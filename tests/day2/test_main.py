@@ -3,7 +3,7 @@ from pathlib import Path
 
 import pytest
 
-from src.day2.main import (
+from src.day02.main import (
     main,
     part_two_main,
 )
@@ -11,7 +11,7 @@ from src.day2.main import (
 
 @pytest.fixture
 def provide_test_lines() -> list[str]:
-    source_path = Path(getsourcefile(main)).resolve().parent / 'README.md'
+    source_path = Path(getsourcefile(main)).resolve().parent / "README.md"
     with source_path.open("r") as file:
         example_slice = slice(22, 28)
         return [line.strip() for line in file.readlines()[example_slice]]
