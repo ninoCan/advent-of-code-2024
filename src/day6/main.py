@@ -3,7 +3,7 @@ from typing import Optional
 
 
 from src.utils import Grid, Point
-from src.utils.Directions import Direction, rotate
+from src.utils.directions import Direction, rotate
 
 
 class Solution:

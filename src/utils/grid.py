@@ -2,8 +2,8 @@ from typing import Sequence
 
 import numpy as np
 
-from src.utils import Point
-from src.utils.Directions import Direction
+from src.utils.point import Point
+from src.utils.directions import Direction
 
 
 class Grid:
