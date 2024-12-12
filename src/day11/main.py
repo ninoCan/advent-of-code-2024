@@ -1,8 +1,17 @@
-import re
+from collections import Counter
 from pathlib import Path
-from typing import Optional, Sequence
+from typing import Optional, Sequence, Callable, Any
+from itertools import chain
+from functools import reduce
+# from src.utils import flatten, apply_n_times
 
-from src.utils import flatten, apply_n_times
+
+def apply_n_times[T](times: int, function: Callable[[T], T], arguments: T) -> T:
+    return reduce(lambda x, _: function(x), range(times), arguments)
+
+
+def flatten(nested: Sequence[Sequence[Any]]) -> Sequence[Any]:
+    return list(chain.from_iterable(nested))
 
 
 class Solution:
@@ -27,14 +36,28 @@ class Solution:
                 return [str(int(s) * 2024)]
 
     def first_task(self) -> int:
-        pattern = re.compile(r"\d+")
-        initial_stones = pattern.findall(self.lines[0])
+        initial_stones = self.lines[0].split()
         return len(apply_n_times(25, self.blink_stones, initial_stones))
 
+    @staticmethod
+    def count_new_stones(previous_stones: Counter[str, int]) -> Counter[str, int]:
+        new_counter = Counter[str, int]()
+        for stone_number, count in previous_stones.items():
+            match stone_number:
+                case "0":
+                    new_counter["1"] += count
+                case s if len(s) % 2 == 0:
+                    middle = len(s) // 2
+                    new_counter.update({str(int(s[middle:])): count})
+                    new_counter.update({str(int(s[:middle])): count})
+                case s:
+                    new_counter.update({str(int(s) * 2024): count})
+        return new_counter
+
     def second_task(self) -> int:
-        pattern = re.compile(r"\d+")
-        initial_stones = pattern.findall(self.lines[0])
-        return len(apply_n_times(75, self.blink_stones, initial_stones))
+        stone_counter = Counter[str, int](self.lines[0].split())
+        final_counter = apply_n_times(75, self.count_new_stones, stone_counter)
+        return final_counter.total()
 
 
 def main():

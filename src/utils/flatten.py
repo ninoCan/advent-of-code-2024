@@ -1,5 +1,5 @@
 from itertools import chain
-from typing import Any, Sequence
+from typing import Sequence
 
-def flatten(nested: Sequence[Sequence[Any]]) -> Sequence[Any]:
+def flatten[T](nested: Sequence[Sequence[T]]) -> Sequence[T]:
     return list(chain.from_iterable(nested))
