@@ -1,8 +1,17 @@
 from collections import Counter
 from pathlib import Path
-from typing import Optional, Sequence
+from typing import Optional, Sequence, Callable, Any
+from itertools import chain
+from functools import reduce
+# from src.utils import flatten, apply_n_times
 
-from src.utils import flatten, apply_n_times
+
+def apply_n_times[T](times: int, function: Callable[[T], T], arguments: T) -> T:
+    return reduce(lambda x, _: function(x), range(times), arguments)
+
+
+def flatten(nested: Sequence[Sequence[Any]]) -> Sequence[Any]:
+    return list(chain.from_iterable(nested))
 
 
 class Solution:
@@ -36,13 +45,13 @@ class Solution:
         for stone_number, count in previous_stones.items():
             match stone_number:
                 case "0":
-                    new_counter.update(["1"] * count)
+                    new_counter["1"] += count
                 case s if len(s) % 2 == 0:
                     middle = len(s) // 2
-                    new_counter.update([str(int(s[middle:]))] * count)
-                    new_counter.update([str(int(s[:middle]))] * count)
+                    new_counter.update({str(int(s[middle:])): count})
+                    new_counter.update({str(int(s[:middle])): count})
                 case s:
-                    new_counter.update([str(int(s) * 2024)] * count)
+                    new_counter.update({str(int(s) * 2024): count})
         return new_counter
 
     def second_task(self) -> int:
