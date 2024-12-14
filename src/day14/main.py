@@ -86,8 +86,7 @@ class Solution:
     @staticmethod
     def candidate_check(positions: list[Point]) -> bool:
         xes = Counter([point.x for point in positions])
-        yes = Counter([point.y for point in positions])
-        if True:
+        if xes[55] > 10 and xes[87] > 10:
             return True
 
     def second_task(self) -> int:
@@ -96,17 +95,16 @@ class Solution:
         while True:
             try:
                 new_robots = [robot.move_n_seconds(iteration) for robot in robots]
-                if self.calculate_safety_factor(new_robots) > 10000000:
-                    iteration += 1
-                    continue
                 positions = [robot.position for robot in new_robots]
                 grid = Grid((["." * 103] * 101))
                 for robot in positions:
                     grid.data[*robot] = "A"
+                if not any(["AAAAAAAA" in row for row in grid.rows]):
+                    iteration += 1
+                    continue
                 print(f"Interation number: {iteration}")
                 _print_rows = [print(row) for row in grid.rows]
                 if self.candidate_check(positions):
-                    # if True:
                     if self.prompt_confirmation(iteration, grid.rows) != 0:
                         return iteration
                 iteration += 1
@@ -116,7 +114,7 @@ class Solution:
 
 
 def main():
-    solution = Solution()
+    solution = Solution(grid_size=Point(101, 103))
     print("The first answer is", solution.first_task())
     print("The second answer is", solution.second_task())
 
