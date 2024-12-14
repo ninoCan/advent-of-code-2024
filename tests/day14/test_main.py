@@ -6,6 +6,7 @@ from pathlib import Path
 import pytest
 
 from src.day14.main import Solution
+from src.utils import Point
 
 
 @pytest.fixture
@@ -17,14 +18,7 @@ def provide_test_lines() -> list[str]:
 
 
 def test_first_task(provide_test_lines: list[str]) -> None:
-    under_test = Solution(lines=provide_test_lines)
+    under_test = Solution(lines=provide_test_lines, grid_size=Point(11, 7))
     expected = 12
     actual = under_test.first_task()
-    assert actual == expected
-
-
-def test_second_task(provide_test_lines: list[str]) -> None:
-    under_test = Solution(lines=provide_test_lines)
-    expected = "placeholder"
-    actual = under_test.second_task()
     assert actual == expected

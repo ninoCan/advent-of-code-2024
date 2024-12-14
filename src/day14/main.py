@@ -1,5 +1,4 @@
 import math
-import os
 import re
 from collections import Counter
 from dataclasses import dataclass
@@ -46,9 +45,15 @@ class Robot:
 class Solution:
     _STANDARD_PATH = Path(__file__).parent / "input.txt"
 
-    def __init__(self, path: Path = _STANDARD_PATH, lines: Optional[list[str]] = None):
+    def __init__(
+        self,
+        grid_size: Point,
+        path: Path = _STANDARD_PATH,
+        lines: Optional[list[str]] = None,
+    ):
         with open(path) as file:
             self.lines = file.readlines() if not lines else lines
+            self.grid_size = grid_size
 
     def scan_room_for_robots(self, room_size: Point) -> list[Robot]:
         pattern = re.compile(r"-?\d+")
@@ -61,8 +66,11 @@ class Solution:
         ]
 
     def first_task(self) -> int:
-        # robots = self.scan_room_for_robots(room_size=Point(11, 7))  # test
-        robots = self.scan_room_for_robots(room_size=Point(101, 103))
+        robots = self.scan_room_for_robots(room_size=self.grid_size)
+        return self.calculate_safety_factor(robots)
+
+    @staticmethod
+    def calculate_safety_factor(robots):
         quadrants = [robot.move_n_seconds(100).quadrant for robot in robots]
         return math.prod(
             [value for key, value in Counter(quadrants).items() if key != 0]
@@ -75,32 +83,36 @@ class Solution:
             return iteration
         return 0
 
-    def candidate_check(self, positions: list[Point]) -> bool:
+    @staticmethod
+    def candidate_check(positions: list[Point]) -> bool:
         xes = Counter([point.x for point in positions])
         yes = Counter([point.y for point in positions])
-        if (
-            xfreq > 50 and yfreq > 50
-            for _, xfreq in xes.most_common(1)
-            for _, yfreq in yes.most_common(1)
-        ):
+        if True:
             return True
 
     def second_task(self) -> int:
-        robots = self.scan_room_for_robots(room_size=Point(101, 103))
+        robots = self.scan_room_for_robots(room_size=self.grid_size)
         iteration = 0
         while True:
-            os.system("clear")
-            grid = Grid((["." * 103] * 101))
-            positions = [robot.move_n_seconds(iteration).position for robot in robots]
-            for robot in positions:
-                grid.data[*robot] = "A"
-            print(f"Interation number: {iteration}")
-            _print_rows = [print(row) for row in grid.rows]
-            if self.candidate_check(positions):
-                # if True:
-                if self.prompt_confirmation(iteration, grid.rows) != 0:
-                    return iteration
-            iteration += 1
+            try:
+                new_robots = [robot.move_n_seconds(iteration) for robot in robots]
+                if self.calculate_safety_factor(new_robots) > 10000000:
+                    iteration += 1
+                    continue
+                positions = [robot.position for robot in new_robots]
+                grid = Grid((["." * 103] * 101))
+                for robot in positions:
+                    grid.data[*robot] = "A"
+                print(f"Interation number: {iteration}")
+                _print_rows = [print(row) for row in grid.rows]
+                if self.candidate_check(positions):
+                    # if True:
+                    if self.prompt_confirmation(iteration, grid.rows) != 0:
+                        return iteration
+                iteration += 1
+            except KeyboardInterrupt:
+                print("Last iteration was:", iteration)
+                exit(0)
 
 
 def main():
