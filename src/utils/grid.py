@@ -1,4 +1,5 @@
-from typing import Sequence
+from functools import lru_cache
+from typing import Sequence, Self
 
 import numpy as np
 
@@ -25,16 +26,17 @@ class Grid:
         return False
 
     @staticmethod
+    @lru_cache
     def next_position(current: Point, direction: Direction) -> Point:
         match direction.value:
-            case "^":
-                return Point(current.x, current.y + 1)
-            case ">":
-                return Point(current.x + 1, current.y)
-            case "v":
-                return Point(current.x, current.y - 1)
-            case "<":
+            case Direction.UP.value:
                 return Point(current.x - 1, current.y)
+            case Direction.RIGHT.value:
+                return Point(current.x, current.y + 1)
+            case Direction.DOWN.value:
+                return Point(current.x + 1, current.y)
+            case Direction.LEFT.value:
+                return Point(current.x, current.y - 1)
 
     @property
     def rows(self) -> list[str]:
@@ -62,5 +64,5 @@ class Grid:
     def diagonals(self) -> list[str]:
         return self.main_diagonals + self.anti_diagonals
 
-    def copy(self) -> "Grid":
+    def copy(self) -> Self:
         return Grid(self.data.copy())
