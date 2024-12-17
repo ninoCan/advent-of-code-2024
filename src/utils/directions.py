@@ -1,4 +1,5 @@
 from enum import Enum
+from typing import Self
 
 
 class Direction(Enum):
@@ -11,14 +12,14 @@ class Direction(Enum):
     def __iter__(cls):
         return iter([member.value for member in cls])
 
-
-def rotate(current: str) -> Direction:
-    match current:
-        case "^":
-            return Direction.RIGHT
-        case ">":
-            return Direction.DOWN
-        case "v":
-            return Direction.LEFT
-        case "<":
-            return Direction.UP
+    def rotate(self) -> Self:
+        # TODO: test this refactoring works
+        match self.value:
+            case Direction.UP:
+                return Direction.RIGHT
+            case Direction.RIGHT:
+                return Direction.DOWN
+            case Direction.DOWN:
+                return Direction.LEFT
+            case Direction.LEFT:
+                return Direction.UP
