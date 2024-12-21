@@ -40,7 +40,19 @@ def test_first_task(provide_test_lines: list[str]) -> None:
 
 
 def test_second_task(provide_test_lines: list[str]) -> None:
-    under_test = Solution(lines=provide_test_lines)
-    expected = "placeholder"
-    actual = under_test.second_task()
-    assert actual == expected
+    under_test = RaceTrack(provide_test_lines)
+    actual = under_test.ps_20_cheats()
+    assert actual[50] == 32
+    assert actual[52] == 31
+    assert actual[54] == 29
+    assert actual[56] == 39
+    assert actual[58] == 25
+    assert actual[60] == 23
+    assert actual[62] == 20
+    assert actual[64] == 19
+    assert actual[66] == 12
+    assert actual[68] == 14
+    assert actual[70] == 12
+    assert actual[72] == 22
+    assert actual[74] == 4
+    assert actual[76] == 3

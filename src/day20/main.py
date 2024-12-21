@@ -50,6 +50,19 @@ class RaceTrack(Grid):
                 straight_nnns.append(nnn)
         return set(straight_nnns)
 
+    def long_cheat_destination(self, position: Point, max_ps=20) -> set[Point]:
+        times = {point: idx for idx, point in enumerate(self.original_path)}
+        walled_nns = {point for point in self.nearest_neighbors(position) if self.data[*point] == self._WALL}
+        destinations = set()
+        for wnn in walled_nns:
+            destinations = destinations.union({
+                point for point in times.keys()
+                if  1 <= abs(point.x - wnn.x) + abs(point.y - wnn.y) <= max_ps - 1
+                    and point != position
+                    and times[point] > times[position]
+            })
+        return destinations
+
     @property
     def cheats(self) -> Counter[int, int]:
         times = {point: idx for idx, point in enumerate(self.original_path)}
@@ -57,6 +70,15 @@ class RaceTrack(Grid):
             times[cheat] - times[point] - 2
             for point in times.keys()
             for cheat in self.cheating_destinations(point, False)
+            if times[cheat] > times[point]
+        )
+
+    def ps_20_cheats(self) -> Counter[int, int]:
+        times = {point: idx for idx, point in enumerate(self.original_path)}
+        return Counter[int, int](
+            times[cheat] - times[point] - 2
+            for point in times.keys()
+            for cheat in self.long_cheat_destination(point)
             if times[cheat] > times[point]
         )
 
