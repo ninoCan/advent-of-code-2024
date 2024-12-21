@@ -17,8 +17,12 @@ class Grid:
             else np.char.asarray([])
         )
 
-    def locate(self, char: str):
-        return np.argwhere(self.data == char)
+    def locate(self, char: str) -> Sequence[Point]:
+        np.argwhere(self.data == char)
+        return [
+            Point(int(coords[0]), int(coords[1]))
+            for coords in np.argwhere(self.data == char)
+        ]
 
     def is_inside(self, point: Point) -> bool:
         if 0 <= point.x < self.width and 0 <= point.y < self.height:
@@ -37,6 +41,12 @@ class Grid:
                 return Point(current.x + 1, current.y)
             case Direction.LEFT.value:
                 return Point(current.x, current.y - 1)
+
+    def nearest_neighbors(self, position: Point) -> set[Point]:
+        return set(filter(self.is_inside, {
+            self.next_position(position, direction)
+            for direction in Direction.__members__.values()
+        }))
 
     @property
     def rows(self) -> list[str]:
