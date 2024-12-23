@@ -1,6 +1,9 @@
 from pathlib import Path
 from typing import Optional
 
+from src.day23.network_table import NetworkTable
+
+
 class Solution:
     _STANDARD_PATH = Path(__file__).parent / "input.txt"
 
@@ -9,11 +12,18 @@ class Solution:
             self.lines = file.readlines() if not lines else lines
 
     def first_task(self) -> int:
-        pass
+        connections = NetworkTable(self.lines)
+        parties = connections.lan_parties
+        return sum([
+            any([player.startswith("t") for player in game.split(",")])
+            for game in parties
+        ])
 
 
-    def second_task(self) -> int:
-        pass
+    def second_task(self) -> str:
+        connections = NetworkTable(self.lines)
+        clusters = connections.party_clusters
+        return max(clusters, key=len)
 
 def main():
     solution = Solution()
