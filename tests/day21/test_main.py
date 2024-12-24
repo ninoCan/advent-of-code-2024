@@ -30,14 +30,16 @@ def test_DirectionalToDirectionalEncoder():
     instruction_stub = "<A^A>^^AvvvA"
     under_test = DirectionalEncoder(instruction_stub)
     actual = under_test.to_direction_string
-    expected = "v<<A>>^A<A>AvA^<AA>Av<AAA^>A"
+    expected = "v<<A>>^A<A>AvA<^AA>A<vAAA>^A"
+    # expected = "v<<A>>^A<A>AvA^<AA>Av<AAA^>A"
     assert actual == expected
 
 def test_encode_code_instructions():
     code_stub = "029A"
     under_test = Solution
     actual = under_test.encode_code_instructions(code_stub)
-    expected ="v<A<AA>>^AvAA^<A>Av<<A>>^AvA^Av<A^>A<Av<A>>^AAvA^Av<A<A>>^AAA<Av>A^A"
+    # expected = "<vA<AA>>^AvAA<^A>A<v<A>>^AvA^A<vA>^A<v<A>^A>AAvA^A<v<A>A>^AAAvA<^A>A"
+    expected = "v<A<AA>>^AvAA^<A>Av<<A>>^AvA^Av<A^>A<Av<A>>^AAvA^Av<A<A>>^AAA<Av>A^A"
     assert actual == expected
 
 def test_first_task(provide_test_lines: list[str]) -> None:

@@ -8,7 +8,7 @@ from src.day21.numeric_to_directional_converter import NumericToDirectionalConve
 class Solution:
     _STANDARD_PATH = Path(__file__).parent / "input.txt"
 
-    def __init__(self, path: Path=_STANDARD_PATH, lines: Optional[list[str]] = None):
+    def __init__(self, path: Path = _STANDARD_PATH, lines: Optional[list[str]] = None):
         with open(path) as file:
             self.lines = file.readlines() if not lines else lines
 
@@ -24,19 +24,18 @@ class Solution:
 
     def first_task(self) -> int:
         instructions = {line.strip("\n"): self.encode_code_instructions(line.strip("\n")) for line in self.lines}
-        complexities  = (self.calculate_complexity(instr, code) for code, instr in instructions.items())
+        complexities = (self.calculate_complexity(instr, code) for code, instr in instructions.items())
         return sum(complexities)
-
-
 
     def second_task(self) -> int:
         pass
+
 
 def main():
     solution = Solution()
     print("The first answer is", solution.first_task())
     print("The second answer is", solution.second_task())
 
+
 if __name__ == "__main__":
     main()
-

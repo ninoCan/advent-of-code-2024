@@ -21,7 +21,7 @@ class NumericToDirectionalConverter:
         end_point = NumericPad[f"_{end}"].value
         delta_x = end_point.x - start_point.x
         delta_y = end_point.y - start_point.y
-        if start == "0":
+        if start in ("0", "A"):
             return (
             Direction.UP.value * (-delta_x) +
             Direction.RIGHT.value * delta_y +
