@@ -1,6 +1,7 @@
 from pathlib import Path
 from typing import Optional
 
+from src.day24.full_adder_debugger import FullAdderDebugger
 from src.day24.lazy_evaluator import LazyEvaluator
 
 
@@ -16,7 +17,8 @@ class Solution:
         return evaluator.final_number
 
     def second_task(self) -> str:
-        pass
+        debugger = FullAdderDebugger(self.lines)
+        return ",".join(sorted(debugger.find_wrong_rules))
 
 def main():
     solution = Solution()

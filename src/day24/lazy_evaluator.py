@@ -29,6 +29,16 @@ class LazyEvaluator:
         ]
         return sum([value * 2 ** idx for idx, value in enumerate(zeds)])
 
+    def initial_number(self, addee: str) -> int:
+        if addee not in {"x", "y"}:
+            raise ValueError(f"Invalid addee: {addee}. Must be 'x' or 'y'")
+        digits = [
+            self.wires[key]
+            for key in sorted(self.wires.keys())
+            if key.startswith(addee)
+        ]
+        return sum([value * 2 ** idx for idx, value in enumerate(digits)])
+
 
     def elaborate(self):
         initial_wires = len(self.wires.keys())
