@@ -18,7 +18,7 @@ class Solution:
 
     def second_task(self) -> str:
         debugger = FullAdderDebugger(self.lines)
-        return ",".join(sorted(debugger.find_wrong_rules))
+        return ",".join(sorted(debugger.wrong_gates))
 
 def main():
     solution = Solution()

@@ -2,7 +2,6 @@ import re
 from dataclasses import dataclass
 
 
-
 class LazyEvaluator:
     def __init__(self, data: list[str]):
         wire_pattern = re.compile(r'(\w\d\d): (\d)')
@@ -55,6 +54,7 @@ class Gate:
     right: str
     operator: str
     result = None
+
 
     @property
     def is_evaluated(self) -> bool:
