@@ -1,5 +1,6 @@
 from collections import Counter
-from typing import Optional
+from idlelib.configdialog import changes
+from typing import Optional, Sequence
 
 from src.day22.seller import Seller
 
@@ -14,38 +15,34 @@ class MonkeyBroker:
         self.trading_seq = seq if seq else []
         self.sold = 0
 
-
     @staticmethod
-    def get_best_sequences(seller: Seller) -> Counter[str]:
-        changes = []
-        maxes: dict[str, int] = {}
-        maximum = 0
-        for i, price in enumerate(seller.prices):
-            if i == 0:
-                maximum = price
-            changes.append(price - seller.prices[i - 1])
-            if price > maximum:
-                maximum = price
-            if i > 4 and price == maximum:
-                maxes[",".join(str(el) for el in changes[-4:])] = maximum
-        maxes = { key: value for key, value in maxes.items() if value == maximum}
-        return Counter(maxes.keys())
+    def changes(seller: Seller) -> Sequence[int]:
+       prices = [el for el in seller.prices]
+       for i, price in enumerate(prices):
+           if i == 0: continue
+           yield price - prices[i]
+
+
+    def get_best_sequence(self, seller: Seller) -> Counter[str]:
+        history = [el for el in self.changes(seller)]
+        prices = [el for el in seller.prices]
+        maximum = max(seller.prices)
+        return Counter[str](
+            ",".join(str(el) for el in history[i - 3:i + 1])
+            for i, price in enumerate(prices)
+            if i > 4 and price == maximum
+        )
 
     @property
     def optimal_sequence(self) -> list[int]:
-        counter = Counter[str]()
-        for seller in self.sellers:
-            counter + self.get_best_sequences(seller)
+        counter = sum([self.get_best_sequence(seller) for seller in self.sellers], Counter())
         winner = counter.most_common(1)[0][0]
         return list(map(int, winner.split(",")))
 
-    @staticmethod
-    def sell_with_sequence(seller: Seller, sequence: list[int]) -> int:
-        changes = []
+    def sell_with_sequence(self, seller: Seller, sequence: list[int]) -> int:
+        history = [el for el in self.changes(seller)]
         for i, price in enumerate(seller.prices):
-            if i == 0: continue
-            changes.append(price - seller.prices[i - 1])
-            if i > 4 and changes[-4:] == sequence:
+            if i > 4 and history[i-3:i+1] == sequence:
                 return price
         return 0
 

@@ -31,4 +31,5 @@ class Seller:
 
     @property
     def prices(self) -> Sequence[int]:
-        return [int(str(self.evolve(i))[-1]) for i in range(1, 2001)]
+        for i in range(1, 2001):
+            yield int(str(self.evolve(i))[-1])
