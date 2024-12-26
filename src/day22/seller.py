@@ -1,3 +1,4 @@
+from functools import lru_cache
 from typing import Sequence
 
 
@@ -21,13 +22,17 @@ class Seller:
     def evolve(self, n_times: int = 1) -> int:
         self.secret_number = self.initial_value
         for _ in range(n_times):
-            multiplied = self.secret_number * self._MULTIPLIER_1
-            self.secret_number = self.prune(self.mix(self.secret_number, multiplied))
-            divided = self.secret_number // self._DIVISOR
-            self.secret_number = self.prune(self.mix(self.secret_number, divided))
-            final_step = self.secret_number * self._MULTIPLIER_2
-            self.secret_number = self.prune(self.mix(self.secret_number, final_step))
+            self.secret_number = self.new_secret_number(self.secret_number)
         return self.secret_number
+
+    @lru_cache(maxsize=4000)
+    def new_secret_number(self, old: int) -> int:
+        multiplied = old * self._MULTIPLIER_1
+        stage_1 = self.prune(self.mix(self.secret_number, multiplied))
+        divided = stage_1 // self._DIVISOR
+        stage_2 = self.prune(self.mix(stage_1, divided))
+        final_step = stage_2 * self._MULTIPLIER_2
+        return self.prune(self.mix(stage_2, final_step))
 
     @property
     def prices(self) -> Sequence[int]:
