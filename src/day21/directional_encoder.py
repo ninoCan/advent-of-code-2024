@@ -26,8 +26,8 @@ class DirectionalEncoder:
         delta_y = end_point.y - start_point.y
         if start == Direction.LEFT.value:
             return (
-                Direction.UP.value * (-delta_x) +
                 Direction.RIGHT.value * delta_y +
+                Direction.UP.value * (-delta_x) +
                 "A"
             )
         return (
